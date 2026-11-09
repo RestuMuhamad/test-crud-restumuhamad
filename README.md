@@ -50,6 +50,9 @@ Hentikan: `docker compose down` (tambahkan `-v` untuk menghapus data MySQL agar 
 | `validasi.php` | Validasi form karyawan |
 | `validasi_cuti.php` | Validasi form cuti |
 | `form.php` | Partial form tambah/edit karyawan |
+| `departemen.php` | Daftar departemen + jumlah karyawan (LEFT JOIN COUNT) + pencarian |
+| `departemen_tambah.php` / `departemen_edit.php` / `departemen_hapus.php` | CRUD departemen (hapus ditolak bila masih dipakai karyawan) |
+| `departemen_form.php` / `validasi_departemen.php` | Partial form & validasi departemen (nama wajib, unik, maks 50 karakter) |
 | `index.php` | Daftar karyawan (JOIN departemen) + pencarian |
 | `tambah.php` / `edit.php` / `hapus.php` | CRUD karyawan |
 | `cuti.php` | Daftar cuti (JOIN karyawan), filter rentang tanggal, rekap COUNT + SUM |

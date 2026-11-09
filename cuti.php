@@ -53,6 +53,7 @@ render_page_header('Data Cuti', 'Data Pengajuan Cuti');
 ?>
 <div class="nav">
     <a href="index.php">Data Karyawan</a>
+    <a href="departemen.php">Data Departemen</a>
     <a href="cuti.php">Data Cuti</a>
     <a href="cuti_tambah.php">+ Pengajuan Cuti</a>
 </div>
