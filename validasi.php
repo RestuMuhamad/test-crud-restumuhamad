@@ -27,16 +27,29 @@ function validasi_karyawan($d, $kecuali_id = 0)
             $error[] = 'NIK harus tepat 16 digit angka.';
         } else {
             $hasil = mysql_query("SELECT id FROM karyawan WHERE nik = '" . esc($d['nik']) . "'
-                                  AND id <> " . (int)$kecuali_id);
+                                  AND id <> " . (int)$kecuali_id)
+                or die('Query cek NIK gagal: ' . mysql_error());
             if ($hasil && mysql_num_rows($hasil) > 0) {
                 $error[] = 'NIK sudah terdaftar, gunakan NIK lain.';
             }
         }
     }
 
+    if ($d['departemen_id'] !== '') {
+        if (!ctype_digit($d['departemen_id'])) {
+            $error[] = 'Departemen tidak valid.';
+        } else {
+            $dep = mysql_query("SELECT id FROM departemen WHERE id = " . (int)$d['departemen_id'])
+                or die('Query departemen gagal: ' . mysql_error());
+            if (mysql_num_rows($dep) === 0) {
+                $error[] = 'Departemen tidak ditemukan.';
+            }
+        }
+    }
     if ($d['gender'] !== '' && !in_array($d['gender'], array('Laki-laki', 'Perempuan'))) {
         $error[] = 'Gender tidak valid.';
     }
+
 
     $lahir_ok = $d['tanggal_lahir'] !== '' && tanggal_valid($d['tanggal_lahir']);
     $masuk_ok = $d['tanggal_masuk'] !== '' && tanggal_valid($d['tanggal_masuk']);

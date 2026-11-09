@@ -1,9 +1,10 @@
 <?php
 require_once 'validasi.php';
 
-$id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
-$hasil = mysql_query("SELECT * FROM karyawan WHERE id = $id");
-$row = $hasil ? mysql_fetch_assoc($hasil) : false;
+$id = isset($_GET['id']) ? (int)$_GET['id'] : (isset($_POST['id']) ? (int)$_POST['id'] : 0);
+$hasil = mysql_query("SELECT * FROM karyawan WHERE id = $id")
+    or die('Query gagal: ' . mysql_error());
+$row = mysql_fetch_assoc($hasil);
 if (!$row) {
     header('Location: index.php');
     exit;
