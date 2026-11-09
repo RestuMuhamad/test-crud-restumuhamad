@@ -1,50 +1,38 @@
 <?php
 require_once 'validasi.php';
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : (isset($_POST['id']) ? (int)$_POST['id'] : 0);
-$hasil = mysql_query("SELECT * FROM karyawan WHERE id = $id")
+$employee_id = (int)request_value('id');
+$result = mysql_query("SELECT * FROM karyawan WHERE id = $employee_id")
     or die('Query gagal: ' . mysql_error());
-$row = mysql_fetch_assoc($hasil);
-if (!$row) {
+$employee = mysql_fetch_assoc($result);
+if (!$employee) {
     header('Location: index.php');
     exit;
 }
 
-$error = array();
-$d = $row;
+$errors = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $d = ambil_input_karyawan();
-    $d['id'] = $id;
-    $error = validasi_karyawan($d, $id);
-    if (!$error) {
+    $employee = get_employee_input();
+    $employee['id'] = $employee_id;
+    $errors = validate_employee($employee, $employee_id);
+    if (!$errors) {
         mysql_query("UPDATE karyawan SET
-                        nik = '" . esc($d['nik']) . "',
-                        nama = '" . esc($d['nama']) . "',
-                        gender = '" . esc($d['gender']) . "',
-                        tanggal_lahir = '" . esc($d['tanggal_lahir']) . "',
-                        departemen_id = " . (int)$d['departemen_id'] . ",
-                        tanggal_masuk = '" . esc($d['tanggal_masuk']) . "'
-                     WHERE id = $id")
+                        nik = '" . escape_sql($employee['nik']) . "',
+                        nama = '" . escape_sql($employee['nama']) . "',
+                        gender = '" . escape_sql($employee['gender']) . "',
+                        tanggal_lahir = '" . escape_sql($employee['tanggal_lahir']) . "',
+                        departemen_id = " . (int)$employee['departemen_id'] . ",
+                        tanggal_masuk = '" . escape_sql($employee['tanggal_masuk']) . "'
+                     WHERE id = $employee_id")
             or die('Gagal mengubah: ' . mysql_error());
         header('Location: index.php');
         exit;
     }
 }
+
+render_page_header('Edit Karyawan');
 ?>
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="utf-8">
-    <title>Edit Karyawan</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <h1>Edit Karyawan</h1>
-    <div class="nav"><a href="index.php">&larr; Kembali ke daftar</a></div>
-    <?php include 'form.php'; ?>
-</body>
-
-</html>
+<div class="nav"><a href="index.php">&larr; Kembali ke daftar</a></div>
+<?php include 'form.php'; ?>
+<?php render_page_footer(); ?>

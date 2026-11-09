@@ -46,10 +46,10 @@ Hentikan: `docker compose down` (tambahkan `-v` untuk menghapus data MySQL agar 
 
 | File | Fungsi |
 |---|---|
-| `koneksi.php` | Koneksi DB + helper `esc()` (escape SQL) dan `h()` (escape HTML) |
+| `koneksi.php` | Koneksi DB + helper `escape_sql()`/`escape_html()` (anti SQLi/XSS), `post_value()`/`request_value()` (input), `render_page_header()`/`render_page_footer()`/`render_errors()` (layout) |
 | `validasi.php` | Validasi form karyawan |
 | `validasi_cuti.php` | Validasi form cuti |
-| `_form.php` | Partial form tambah/edit karyawan |
+| `form.php` | Partial form tambah/edit karyawan |
 | `index.php` | Daftar karyawan (JOIN departemen) + pencarian |
 | `tambah.php` / `edit.php` / `hapus.php` | CRUD karyawan |
 | `cuti.php` | Daftar cuti (JOIN karyawan), filter rentang tanggal, rekap COUNT + SUM |
