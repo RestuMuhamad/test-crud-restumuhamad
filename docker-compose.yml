@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_tes_karyawan
+    volumes:
+      - ./db_tes_karyawan.sql:/docker-entrypoint-initdb.d/db_tes_karyawan.sql:ro
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - db
