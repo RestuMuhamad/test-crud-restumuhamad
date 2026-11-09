@@ -65,7 +65,7 @@ $karyawan = mysql_query("SELECT id, nik, nama FROM karyawan ORDER BY nama")
 
         <label for="status">Status</label>
         <select id="status" name="status">
-            <?php foreach (array('Menunggu', 'Disetujui', 'Ditolak') as $s) { ?>
+            <?php foreach (daftar_status_cuti() as $s) { ?>
             <option value="<?php echo $s; ?>" <?php if ($d['status'] === $s) echo 'selected'; ?>><?php echo $s; ?></option>
             <?php } ?>
         </select>

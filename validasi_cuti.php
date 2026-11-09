@@ -1,6 +1,11 @@
 <?php
 require_once 'validasi.php';
 
+// Nilai ENUM status cuti (sumber tunggal untuk form & validasi).
+function daftar_status_cuti() {
+    return array('Menunggu', 'Disetujui', 'Ditolak');
+}
+
 // Validasi data cuti. Mengembalikan array pesan error (kosong = valid).
 function validasi_cuti($d) {
     $error = array();
@@ -35,7 +40,7 @@ function validasi_cuti($d) {
         $error[] = 'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.';
     }
 
-    if ($d['status'] !== '' && !in_array($d['status'], array('Menunggu', 'Disetujui', 'Ditolak'))) {
+    if ($d['status'] !== '' && !in_array($d['status'], daftar_status_cuti())) {
         $error[] = 'Status tidak valid.';
     }
 

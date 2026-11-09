@@ -25,6 +25,10 @@ th { background: #f0f0f0; }
 
 form.cari { margin: 12px 0; }
 
+form.inline { margin: 0; }
+form.inline select { padding: 3px 4px; }
+form.inline button { padding: 3px 8px; margin-left: 4px; }
+
 form.data {
     max-width: 420px;
     margin-top: 12px;

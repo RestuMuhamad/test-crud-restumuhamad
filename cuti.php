@@ -1,9 +1,30 @@
 <?php
-require_once 'validasi.php';
+require_once 'validasi_cuti.php';
 
-$dari = isset($_GET['dari']) ? trim($_GET['dari']) : '';
-$sampai = isset($_GET['sampai']) ? trim($_GET['sampai']) : '';
+// Filter rentang dibaca dari GET (filter form) atau POST (form status per baris).
+$dari = isset($_GET['dari']) ? trim($_GET['dari']) : (isset($_POST['dari']) ? trim($_POST['dari']) : '');
+$sampai = isset($_GET['sampai']) ? trim($_GET['sampai']) : (isset($_POST['sampai']) ? trim($_POST['sampai']) : '');
 
+$error = array();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+    $status = isset($_POST['status']) ? trim($_POST['status']) : '';
+    if ($id === '' || !ctype_digit($id)) {
+        $error[] = 'Data cuti tidak valid.';
+    }
+    if (!in_array($status, daftar_status_cuti())) {
+        $error[] = 'Status tidak valid.';
+    }
+    if (!$error) {
+        mysql_query("UPDATE cuti SET status = '" . esc($status) . "' WHERE id = " . (int)$id)
+            or die('Query gagal: ' . mysql_error());
+        $qs = array();
+        if ($dari !== '' && tanggal_valid($dari)) $qs['dari'] = $dari;
+        if ($sampai !== '' && tanggal_valid($sampai)) $qs['sampai'] = $sampai;
+        header('Location: cuti.php' . ($qs ? '?' . http_build_query($qs) : ''));
+        exit;
+    }
+}
 $where = array();
 if ($dari !== '' && tanggal_valid($dari)) {
     $where[] = "c.tanggal_mulai >= '" . esc($dari) . "'";
@@ -42,6 +63,14 @@ $rk = mysql_fetch_assoc($rekap);
         <a href="cuti_tambah.php">+ Pengajuan Cuti</a>
     </div>
 
+    <?php if (!empty($error)) { ?>
+    <div class="error">
+        <ul>
+            <?php foreach ($error as $e) { ?><li><?php echo h($e); ?></li><?php } ?>
+        </ul>
+    </div>
+    <?php } ?>
+
     <form class="cari" method="get" action="cuti.php">
         Dari <input type="date" name="dari" value="<?php echo h($dari); ?>">
         Sampai <input type="date" name="sampai" value="<?php echo h($sampai); ?>">
@@ -67,7 +96,19 @@ $rk = mysql_fetch_assoc($rekap);
             <td><?php echo h($r['tanggal_selesai']); ?></td>
             <td><?php echo (int)$r['lama_cuti']; ?></td>
             <td><?php echo h($r['alasan']); ?></td>
-            <td><?php echo h($r['status']); ?></td>
+            <td>
+                <form class="inline" method="post" action="cuti.php">
+                    <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
+                    <input type="hidden" name="dari" value="<?php echo h($dari); ?>">
+                    <input type="hidden" name="sampai" value="<?php echo h($sampai); ?>">
+                    <select name="status">
+                        <?php foreach (daftar_status_cuti() as $s) { ?>
+                        <option value="<?php echo $s; ?>" <?php if ($r['status'] === $s) echo 'selected'; ?>><?php echo $s; ?></option>
+                        <?php } ?>
+                    </select>
+                    <button type="submit">Simpan</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </table>
