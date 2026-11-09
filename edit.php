@@ -34,14 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <title>Edit Karyawan</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <h1>Edit Karyawan</h1>
     <div class="nav"><a href="index.php">&larr; Kembali ke daftar</a></div>
-    <?php include '_form.php'; ?>
+    <?php include 'form.php'; ?>
 </body>
+
 </html>
