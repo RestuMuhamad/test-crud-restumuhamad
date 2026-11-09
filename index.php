@@ -25,6 +25,8 @@ $hasil = mysql_query("SELECT k.*, d.nama_departemen
     <div class="nav">
         <a href="index.php">Data Karyawan</a>
         <a href="tambah.php">+ Tambah Karyawan</a>
+        <a href="cuti.php">Data Cuti</a>
+        <a href="cuti_tambah.php">+ Pengajuan Cuti</a>
     </div>
 
     <form class="cari" method="get" action="index.php">
